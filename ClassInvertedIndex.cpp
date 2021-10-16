@@ -271,10 +271,59 @@ void ClassInvertedIndex::inorder(ptr p)
 // Deleting a node
 void ClassInvertedIndex::del(int x,ptr &p)
 {
-
+	ptr d;
+	if (p==NULL)
+	{
+		cout<<"Sorry! value not found\n"<<endl;
+	}
+	else if ( x < p->value)
+	{
+		del(x,p->left);
+	}
+	else if (x > p->value)
+	{
+		del(x,p->right);
+	}
+	else if ((p->left == NULL) && (p->right == NULL))
+	{
+		d=p;
+		free(d);
+		p=NULL;
+		cout<<"value deleted successfully\n"<<endl;
+	}
+	else if (p->left == NULL)
+	{
+		d=p;
+		free(d);
+		p=p->right;
+		cout<<"value deleted successfully\n"<<endl;
+	}
+	else if (p->right == NULL)
+	{
+		d=p;
+		p=p->left;
+		free(d);
+		cout<<"value deleted successfully\n"<<endl;
+	}
+	else
+	{
+		p->value = deletemin(p->right);
+	}
 }
 
 int ClassInvertedIndex::deletemin(ptr &p)
 {
-	
+	int c;
+	cout<<"inside deltemin\n"<<endl;
+	if (p->left == NULL)
+	{
+		c=p->value;
+		p=p->right;
+		return c;
+	}
+	else
+	{
+		c=deletemin(p->left);
+		return c;
+	}
 }
