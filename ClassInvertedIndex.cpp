@@ -182,22 +182,38 @@ int ClassInvertedIndex::c_height(ptr_child z)
 		return t;
 	}
 }
+
 ptr ClassInvertedIndex:: srl(ptr &p1)
 {
-	
+	ptr p2;
+	p2 = p1->left;
+	p1->left = p2->right;
+	p2->right = p1;
+	p1->height = max(m_height(p1->left),m_height(p1->right)) + 1;
+	p2->height = max(m_height(p2->left),p1->height) + 1;
+	return p2;
 }
 ptr ClassInvertedIndex:: srr(ptr &p1)
 {
-	
+	ptr p2;
+	p2 = p1->right;
+	p1->right = p2->left;
+	p2->left = p1;
+	p1->height = max(m_height(p1->left),m_height(p1->right)) + 1;
+	p2->height = max(p1->height,m_height(p2->right)) + 1;
+	return p2;
 }
 ptr ClassInvertedIndex:: drl(ptr &p1)
 {
-	
+	p1->left=srr(p1->left);
+	return srl(p1);
 }
 ptr ClassInvertedIndex::drr(ptr &p1)
 {
-	
+	p1->right = srl(p1->right);
+	return srr(p1);
 }
+
 
 //Node_child
 ptr_child ClassInvertedIndex:: srl(ptr_child &p1)
