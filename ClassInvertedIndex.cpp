@@ -20,13 +20,133 @@ ClassInvertedIndex::~ClassInvertedIndex()
 // Inserting a node to main
 void ClassInvertedIndex::insert(int x,int y,ptr &p)
 {
+if (p == NULL)
+	{
+		p = new node;
+		p->value = x;
+		p->left=NULL;
+		p->right = NULL;
+		p->height=0;
 
+
+		ptr_child z;
+		z=NULL;
+        insert_child(y,z);
+		//cout<<"New x:"<<x<<endl;
+		if (p==NULL)
+		{
+			cout<<"Out of Space\n"<<endl;
+		}
+	}
+	else
+	{
+		if (x<p->value)
+		{
+		    //cout<<"x left:"<<x<<endl;
+			insert(x,y,p->left);
+			if ((m_height(p->left) - m_height(p->right))==2)
+			{
+				if (x < p->left->value)
+				{
+					p=srl(p);
+				}
+				else
+				{
+					p = drl(p);
+				}
+			}
+		}
+		else if (x>p->value)
+		{//cout<<"x right:"<<x<<endl;
+			insert(x,y,p->right);
+			if ((m_height(p->right) - m_height(p->left))==2)
+			{
+				if (x > p->right->value)
+				{
+					p=srr(p);
+				}
+				else
+				{
+					p = drr(p);
+				}
+            }
+		}
+		else
+		{
+			insert_child(y,&z);
+		}
+//}
+//cout<<"oiw:"<<&p<<endl;
+int m,n,d;
+m=m_height(p->left);
+n=m_height(p->right);
+d=max(m,n);
+p->height = d + 1;
 }
 
 // Inserting a node to child
 void ClassInvertedIndex::insert_child(int y,ptr_child &z)
 {
-
+if (z == NULL)
+	{
+		z = new node_child;
+		z->value = y;
+		z->left=NULL;
+		z->right = NULL;
+		z->height=0;
+        //
+        //
+        node_child
+		//cout<<"New x:"<<y<<endl;
+		if (z==NULL)
+		{
+			cout<<"Out of Space\n"<<endl;
+		}
+	}
+	else
+	{
+		if (y<z->value)
+		{
+		    //cout<<"x left:"<<y<<endl;
+			insert_child(y,z->left);
+			if ((c_height(z->left) - c_height(z->right))==2)
+			{
+				if (y < z->left->value)
+				{
+					z=srl(z);
+				}
+				else
+				{
+					z = drl(z);
+				}
+			}
+		}
+		else if (y>z->value)
+		{//cout<<"y right:"<<y<<endl;
+			insert_child(y,z->right);
+			if ((c_height(z->right) - c_height(z->left))==2)
+			{
+				if (y > z->right->value)
+				{
+					z=srr(z);
+				}
+				else
+				{
+					z = drr(z);
+				}
+            }
+		}
+		/*else
+		{
+			cout<<"value Exists\n"<<endl;
+		}*/
+}
+//cout<<"oiw:"<<&z<<endl;
+int m_c,n_c,d_c;
+m_c=c_height(z->left);
+n_c=c_height(z->right);
+d_c=max(m_c,n_c);
+z->height = d_c + 1;
 }
 
 int ClassInvertedIndex::max(int value1, int value2)
