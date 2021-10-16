@@ -151,16 +151,36 @@ z->height = d_c + 1;
 
 int ClassInvertedIndex::max(int value1, int value2)
 {
+		return ((value1 > value2) ? value1 : value2);
+
 }
 
 int ClassInvertedIndex::m_height(ptr p)
 {
-
+int t;
+	if (p == NULL)
+	{
+		return -1;
+	}
+	else
+	{
+		t = p->height;
+		return t;
+	}
 }
 
 int ClassInvertedIndex::c_height(ptr_child z)
 {
- 
+ int t;
+	if (z == NULL)
+	{
+		return -1;
+	}
+	else
+	{
+		t = z->height;
+		return t;
+	}
 }
 ptr ClassInvertedIndex:: srl(ptr &p1)
 {
