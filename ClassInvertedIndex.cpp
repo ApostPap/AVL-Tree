@@ -182,40 +182,71 @@ int ClassInvertedIndex::c_height(ptr_child z)
 		return t;
 	}
 }
+
 ptr ClassInvertedIndex:: srl(ptr &p1)
 {
-	
+	ptr p2;
+	p2 = p1->left;
+	p1->left = p2->right;
+	p2->right = p1;
+	p1->height = max(m_height(p1->left),m_height(p1->right)) + 1;
+	p2->height = max(m_height(p2->left),p1->height) + 1;
+	return p2;
 }
 ptr ClassInvertedIndex:: srr(ptr &p1)
 {
-	
+	ptr p2;
+	p2 = p1->right;
+	p1->right = p2->left;
+	p2->left = p1;
+	p1->height = max(m_height(p1->left),m_height(p1->right)) + 1;
+	p2->height = max(p1->height,m_height(p2->right)) + 1;
+	return p2;
 }
 ptr ClassInvertedIndex:: drl(ptr &p1)
 {
-	
+	p1->left=srr(p1->left);
+	return srl(p1);
 }
 ptr ClassInvertedIndex::drr(ptr &p1)
 {
-	
+	p1->right = srl(p1->right);
+	return srr(p1);
 }
+
 
 //Node_child
 ptr_child ClassInvertedIndex:: srl(ptr_child &p1)
 {
-	
+	ptr_child p2;
+	p2 = p1->left;
+	p1->left = p2->right;
+	p2->right = p1;
+	p1->height = max(c_height(p1->left),c_height(p1->right)) + 1;
+	p2->height = max(c_height(p2->left),p1->height) + 1;
+	return p2;
 }
 ptr_child ClassInvertedIndex:: srr(ptr_child &p1)
 {
-	
+	ptr_child p2;
+	p2 = p1->right;
+	p1->right = p2->left;
+	p2->left = p1;
+	p1->height = max(c_height(p1->left),c_height(p1->right)) + 1;
+	p2->height = max(p1->height,c_height(p2->right)) + 1;
+	return p2;
 }
 ptr_child ClassInvertedIndex:: drl(ptr_child &p1)
 {
-	
+	p1->left=srr(p1->left);
+	return srl(p1);
 }
 ptr_child ClassInvertedIndex::drr(ptr_child &p1)
 {
-	
+	p1->right = srl(p1->right);
+	return srr(p1);
 }
+
 
 
 
@@ -271,10 +302,59 @@ void ClassInvertedIndex::inorder(ptr p)
 // Deleting a node
 void ClassInvertedIndex::del(int x,ptr &p)
 {
-
+	ptr d;
+	if (p==NULL)
+	{
+		cout<<"Sorry! value not found\n"<<endl;
+	}
+	else if ( x < p->value)
+	{
+		del(x,p->left);
+	}
+	else if (x > p->value)
+	{
+		del(x,p->right);
+	}
+	else if ((p->left == NULL) && (p->right == NULL))
+	{
+		d=p;
+		free(d);
+		p=NULL;
+		cout<<"value deleted successfully\n"<<endl;
+	}
+	else if (p->left == NULL)
+	{
+		d=p;
+		free(d);
+		p=p->right;
+		cout<<"value deleted successfully\n"<<endl;
+	}
+	else if (p->right == NULL)
+	{
+		d=p;
+		p=p->left;
+		free(d);
+		cout<<"value deleted successfully\n"<<endl;
+	}
+	else
+	{
+		p->value = deletemin(p->right);
+	}
 }
 
 int ClassInvertedIndex::deletemin(ptr &p)
 {
-	
+	int c;
+	cout<<"inside deltemin\n"<<endl;
+	if (p->left == NULL)
+	{
+		c=p->value;
+		p=p->right;
+		return c;
+	}
+	else
+	{
+		c=deletemin(p->left);
+		return c;
+	}
 }
