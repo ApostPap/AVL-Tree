@@ -223,22 +223,48 @@ ptr_child ClassInvertedIndex::drr(ptr_child &p1)
 // Copy a tree
 void ClassInvertedIndex::copy(ptr &p,ptr &p1)
 {
-
+	makeempty(p1);
+	p1 = nodecopy(p);
 }
 // Make a tree empty
 void ClassInvertedIndex::makeempty(ptr &p)
 {
-	
+	ptr d;
+	if (p != NULL)
+	{
+		makeempty(p->left);
+		makeempty(p->right);
+		d=p;
+		free(d);
+		p=NULL;
+	}
 }
 // Copy the nodes
 ptr ClassInvertedIndex::nodecopy(ptr &p)
 {
-	
+	ptr temp;
+	if (p==NULL)
+	{
+		return p;
+	}
+	else
+	{
+		temp = new node;
+		temp->value = p->value;
+		temp->left = nodecopy(p->left);
+		temp->right = nodecopy(p->right);
+		return temp;
+	}
 }
 
 void ClassInvertedIndex::inorder(ptr p)
 {
-
+	if (p!=NULL)
+	{
+		inorder(p->left);
+		cout<<p->value<<"\t";
+		inorder(p->right);
+	}
 }
 
 
