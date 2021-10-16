@@ -218,20 +218,35 @@ ptr ClassInvertedIndex::drr(ptr &p1)
 //Node_child
 ptr_child ClassInvertedIndex:: srl(ptr_child &p1)
 {
-	
+	ptr_child p2;
+	p2 = p1->left;
+	p1->left = p2->right;
+	p2->right = p1;
+	p1->height = max(c_height(p1->left),c_height(p1->right)) + 1;
+	p2->height = max(c_height(p2->left),p1->height) + 1;
+	return p2;
 }
 ptr_child ClassInvertedIndex:: srr(ptr_child &p1)
 {
-	
+	ptr_child p2;
+	p2 = p1->right;
+	p1->right = p2->left;
+	p2->left = p1;
+	p1->height = max(c_height(p1->left),c_height(p1->right)) + 1;
+	p2->height = max(p1->height,c_height(p2->right)) + 1;
+	return p2;
 }
 ptr_child ClassInvertedIndex:: drl(ptr_child &p1)
 {
-	
+	p1->left=srr(p1->left);
+	return srl(p1);
 }
 ptr_child ClassInvertedIndex::drr(ptr_child &p1)
 {
-	
+	p1->right = srl(p1->right);
+	return srr(p1);
 }
+
 
 
 
